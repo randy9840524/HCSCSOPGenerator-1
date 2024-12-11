@@ -29,8 +29,10 @@ from routes import *
 # Create database tables
 with app.app_context():
     try:
+        # Recreate all tables
+        db.drop_all()
         db.create_all()
-        logger.info("Database tables created successfully")
+        logger.info("Database tables recreated successfully")
     except Exception as e:
         logger.error(f"Error creating database tables: {str(e)}")
         raise
