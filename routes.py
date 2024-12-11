@@ -47,4 +47,7 @@ def generate_sop():
         
     except Exception as e:
         db.session.rollback()
-        return str(e), 500
+        app.logger.error(f"Error generating SOP: {str(e)}")
+        if "UNIQUE constraint failed" in str(e):
+            return "A document with this ID already exists. Please try again.", 400
+        return "An error occurred while generating the SOP. Please try again.", 500

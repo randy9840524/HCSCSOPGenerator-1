@@ -4,12 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const documentIdInput = document.getElementById('document_id');
 
     titleInput.addEventListener('input', function() {
-        const timestamp = new Date().getTime().toString().slice(-6);
+        const timestamp = new Date().getTime().toString();
+        const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
         const prefix = this.value.trim()
             .substring(0, 3)
             .toUpperCase()
             .replace(/[^A-Z]/g, 'X');
-        documentIdInput.value = `${prefix}-${timestamp}`;
+        documentIdInput.value = `${prefix}-${timestamp.slice(-6)}-${randomNum}`;
     });
 
     // Form validation
