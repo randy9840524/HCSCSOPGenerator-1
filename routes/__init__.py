@@ -1,15 +1,17 @@
-from flask import render_template, request, send_file
-from app import app, db
+from flask import Blueprint, render_template, request, send_file
+from app import db, logger
 from models import SOP
 from utils.document_generator import generate_sop_document
 from datetime import datetime
 import io
 
-@app.route('/')
+main = Blueprint('main', __name__)
+
+@main.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/generate_sop', methods=['POST'])
+@main.route('/generate_sop', methods=['POST'])
 def generate_sop():
     sop_data = None
     try:
@@ -26,7 +28,7 @@ def generate_sop():
             'payroll_phone': request.form['payroll_phone'].strip()
         }
         
-        app.logger.info(f"Attempting to create SOP with document ID: {sop_data['document_id']}")
+        logger.info(f"Attempting to create SOP with document ID: {sop_data['document_id']}")
         
         # Use a transaction to handle race conditions
         try:
@@ -37,14 +39,14 @@ def generate_sop():
             
             if existing_sop:
                 db.session.rollback()
-                app.logger.warning(f"Document ID already exists: {sop_data['document_id']}")
+                logger.warning(f"Document ID already exists: {sop_data['document_id']}")
                 return "A document with this ID already exists. Please try generating a new document ID.", 400
                 
             # Create SOP record
             sop = SOP(**sop_data)
             db.session.add(sop)
             db.session.commit()
-            app.logger.info(f"Successfully created SOP with document ID: {sop_data['document_id']}")
+            logger.info(f"Successfully created SOP with document ID: {sop_data['document_id']}")
         
             # Generate document
             doc = generate_sop_document(sop_data)
@@ -67,8 +69,8 @@ def generate_sop():
             raise
             
     except Exception as e:
-        app.logger.error(f"Error generating SOP: {str(e)}")
+        logger.error(f"Error generating SOP: {str(e)}")
         if sop_data and 'document_id' in sop_data:
-            app.logger.error(f"Document ID: {sop_data['document_id']}")
-        app.logger.error(f"Full error details: {repr(e)}")
+            logger.error(f"Document ID: {sop_data['document_id']}")
+        logger.error(f"Full error details: {repr(e)}")
         return "An error occurred while generating the SOP. Please try again.", 500
