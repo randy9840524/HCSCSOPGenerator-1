@@ -4,7 +4,7 @@ from datetime import datetime
 class SOP(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
-    document_id = db.Column(db.String(50), unique=True, nullable=False)
+    document_id = db.Column(db.String(100), unique=True, nullable=False, index=True)
     effective_date = db.Column(db.DateTime, nullable=False)
     version = db.Column(db.String(10), nullable=False)
     summary = db.Column(db.Text, nullable=False)

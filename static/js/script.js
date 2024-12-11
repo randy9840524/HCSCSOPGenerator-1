@@ -4,15 +4,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const documentIdInput = document.getElementById('document_id');
 
     titleInput.addEventListener('input', function() {
-        const uuid = Array.from({ length: 16 }, () => 
-            Math.floor(Math.random() * 16).toString(16)
-        ).join('');
+        // Generate a more unique identifier
+        const timestamp = new Date().getTime().toString();
+        const random = Array.from({ length: 8 }, () => 
+            Math.floor(Math.random() * 36).toString(36)
+        ).join('').toUpperCase();
+        
+        // Get clean prefix from title
         const prefix = this.value.trim()
             .substring(0, 3)
             .toUpperCase()
             .replace(/[^A-Z]/g, 'X');
-        const timestamp = new Date().getTime().toString().slice(-6);
-        documentIdInput.value = `${prefix}-${timestamp}-${uuid}`;
+            
+        // Create document ID with format: PREFIX-TIMESTAMP-RANDOM
+        documentIdInput.value = `${prefix}-${timestamp}-${random}`;
+        
+        // Log the generated ID for debugging
+        console.log('Generated Document ID:', documentIdInput.value);
     });
 
     // Form validation
