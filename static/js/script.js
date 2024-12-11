@@ -5,12 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     titleInput.addEventListener('input', function() {
         const timestamp = new Date().getTime().toString();
-        const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+        const randomStr = Math.random().toString(36).substring(2, 8).toUpperCase();
         const prefix = this.value.trim()
             .substring(0, 3)
             .toUpperCase()
             .replace(/[^A-Z]/g, 'X');
-        documentIdInput.value = `${prefix}-${timestamp.slice(-6)}-${randomNum}`;
+        documentIdInput.value = `${prefix}-${timestamp}-${randomStr}`;
     });
 
     // Form validation
