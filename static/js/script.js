@@ -25,14 +25,68 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Generated Document ID:', documentIdInput.value);
     });
 
-    // Form validation
+    // Form validation and submission
     const form = document.getElementById('sopForm');
-    form.addEventListener('submit', function(event) {
+    let isSubmitting = false;
+
+    function generateNewDocumentId() {
+        const timestamp = new Date().getTime();
+        const random1 = Math.random().toString(36).substring(2, 6);
+        const random2 = Math.random().toString(36).substring(2, 6);
+        const prefix = titleInput.value.trim()
+            .substring(0, 3)
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, 'X');
+        return `${prefix}-${timestamp}-${random1}-${random2}`.toUpperCase();
+    }
+
+    form.addEventListener('submit', async function(event) {
+        event.preventDefault();
+
         if (!form.checkValidity()) {
-            event.preventDefault();
             event.stopPropagation();
+            form.classList.add('was-validated');
+            return;
         }
-        form.classList.add('was-validated');
+
+        if (isSubmitting) {
+            return;
+        }
+
+        isSubmitting = true;
+        
+        try {
+            const formData = new FormData(form);
+            const response = await fetch('/generate_sop', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.status === 400) {
+                // Document ID exists, generate a new one and retry
+                documentIdInput.value = generateNewDocumentId();
+                console.log('Generated new Document ID:', documentIdInput.value);
+                form.dispatchEvent(new Event('submit'));
+            } else if (!response.ok) {
+                throw new Error('Server error');
+            } else {
+                // Success - trigger file download
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `SOP_${documentIdInput.value}.docx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while generating the SOP. Please try again.');
+        } finally {
+            isSubmitting = false;
+        }
     });
 
     // Set minimum date for effective date

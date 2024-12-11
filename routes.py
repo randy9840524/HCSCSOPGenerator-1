@@ -28,39 +28,47 @@ def generate_sop():
         
         app.logger.info(f"Attempting to create SOP with document ID: {sop_data['document_id']}")
         
-        # Check if document ID already exists
-        existing_sop = SOP.query.filter_by(document_id=sop_data['document_id']).first()
-        if existing_sop:
-            app.logger.warning(f"Document ID already exists: {sop_data['document_id']}")
-            return "A document with this ID already exists. Please try generating a new document ID.", 400
+        # Use a transaction to handle race conditions
+        try:
+            # Check if document ID already exists within transaction
+            existing_sop = db.session.query(SOP).filter_by(
+                document_id=sop_data['document_id']
+            ).with_for_update().first()
             
-        # Create SOP record
-        sop = SOP(**sop_data)
-        db.session.add(sop)
-        db.session.commit()
-        app.logger.info(f"Successfully created SOP with document ID: {sop_data['document_id']}")
+            if existing_sop:
+                db.session.rollback()
+                app.logger.warning(f"Document ID already exists: {sop_data['document_id']}")
+                return "A document with this ID already exists. Please try generating a new document ID.", 400
+                
+            # Create SOP record
+            sop = SOP(**sop_data)
+            db.session.add(sop)
+            db.session.commit()
+            app.logger.info(f"Successfully created SOP with document ID: {sop_data['document_id']}")
         
-        # Generate document
-        doc = generate_sop_document(sop_data)
-        
-        # Save to memory buffer
-        buffer = io.BytesIO()
-        doc.save(buffer)
-        buffer.seek(0)
-        
-        return send_file(
-            buffer,
-            mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            as_attachment=True,
-            download_name=f'SOP_{sop_data["document_id"]}.docx'
-        )
-        
+            # Generate document
+            doc = generate_sop_document(sop_data)
+            
+            # Save to memory buffer
+            buffer = io.BytesIO()
+            doc.save(buffer)
+            buffer.seek(0)
+            
+            return send_file(
+                buffer,
+                mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                as_attachment=True,
+                download_name=f'SOP_{sop_data["document_id"]}.docx'
+            )
+        except Exception as e:
+            db.session.rollback()
+            if "UNIQUE constraint failed" in str(e):
+                return "A document with this ID already exists. Please try again.", 400
+            raise
+            
     except Exception as e:
-        db.session.rollback()
         app.logger.error(f"Error generating SOP: {str(e)}")
-        app.logger.error(f"Document ID: {sop_data.get('document_id')}")
+        if sop_data and 'document_id' in sop_data:
+            app.logger.error(f"Document ID: {sop_data['document_id']}")
         app.logger.error(f"Full error details: {repr(e)}")
-        
-        if "UNIQUE constraint failed" in str(e):
-            return "A document with this ID already exists. Please try again.", 400
         return "An error occurred while generating the SOP. Please try again.", 500
