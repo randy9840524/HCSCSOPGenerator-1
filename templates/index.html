@@ -1,61 +1,63 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="hero-section mb-5" style="background-image: url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40')">
-    <div class="overlay">
-        <h1>SOP Generator</h1>
-        <p>Generate ISO 9000 compliant Standard Operating Procedures</p>
-    </div>
-</div>
+<div class="main-container">
+    <h1>HCSC Shared Services SOP Generator</h1>
+    <p class="subtitle">Generate ISO 9000 compliant Standard Operating Procedures</p>
 
-<div class="row">
-    <div class="col-lg-8 mx-auto">
-        <div class="card bg-darker">
-            <div class="card-body">
-                <form id="sopForm" method="POST" action="{{ url_for('generate_sop') }}">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title of SOP</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
+    <div class="form-container">
+        <form id="sopForm" method="POST" action="{{ url_for('generate_sop') }}">
+            <div class="sop-header">
+                <div class="mb-4">
+                    <label for="title" class="form-label">Title of SOP</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label for="document_id" class="form-label">Document ID</label>
+                        <input type="text" class="form-control" id="document_id" name="document_id" readonly>
                     </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="document_id" class="form-label">Document ID</label>
-                            <input type="text" class="form-control" id="document_id" name="document_id" readonly>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="effective_date" class="form-label">Effective Date</label>
-                            <input type="date" class="form-control" id="effective_date" name="effective_date" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="version" class="form-label">Version</label>
-                            <input type="text" class="form-control" id="version" name="version" value="1.1" required>
-                        </div>
+                    <div class="col-md-4">
+                        <label for="effective_date" class="form-label">Effective Date</label>
+                        <input type="date" class="form-control" id="effective_date" name="effective_date" required>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="summary" class="form-label">SOP Summary</label>
-                        <textarea class="form-control" id="summary" name="summary" rows="5" required></textarea>
+                    <div class="col-md-4">
+                        <label for="version" class="form-label">Version</label>
+                        <input type="text" class="form-control" id="version" name="version" value="1.1" required>
                     </div>
+                </div>
+            </div>
 
-                    <h5 class="mt-4">Contact Information</h5>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">HC IT Delivery Team</label>
+            <div class="summary-section mb-4">
+                <label for="summary" class="form-label">Provide SOP Summary</label>
+                <textarea class="form-control" id="summary" name="summary" rows="8" placeholder="Enter your SOP summary here..." required></textarea>
+            </div>
+
+            <div class="contact-section mb-4">
+                <h4>Contact Information</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="contact-group">
+                            <h5>HC IT Delivery Team</h5>
                             <input type="email" class="form-control mb-2" name="contact_email" placeholder="Email" required>
                             <input type="tel" class="form-control" name="contact_phone" placeholder="Phone" required>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">HCSC Payroll Support</label>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="contact-group">
+                            <h5>HCSC Payroll Support</h5>
                             <input type="email" class="form-control mb-2" name="payroll_email" placeholder="Email" required>
                             <input type="tel" class="form-control" name="payroll_phone" placeholder="Phone" required>
                         </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary">Generate SOP</button>
-                </form>
+                </div>
             </div>
-        </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Generate SOP</button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}
