@@ -23,15 +23,8 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # Initialize database
 db = SQLAlchemy(app)
 
-# Import models
-from models import Template
-
-# Import and register blueprints
-from routes.template_routes import templates as template_blueprint
-from routes import main as main_blueprint
-
-app.register_blueprint(main_blueprint)
-app.register_blueprint(template_blueprint)
+# Import routes after db initialization
+from routes import *
 
 # Create database tables
 with app.app_context():
@@ -40,16 +33,6 @@ with app.app_context():
         db.drop_all()
         db.create_all()
         logger.info("Database tables recreated successfully")
-        
-        # Create default template
-        default_template = Template(
-            name="ISO 9000 Standard Template",
-            description="Default template for ISO 9000 compliant SOPs",
-            content="1. Purpose\n2. Scope\n3. Definitions\n4. Responsibilities\n5. Procedure\n6. References\n7. Records\n8. Quality Records\n9. Revision History",
-            is_default=True
-        )
-        db.session.add(default_template)
-        db.session.commit()
     except Exception as e:
         logger.error(f"Error creating database tables: {str(e)}")
         raise
