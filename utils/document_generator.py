@@ -25,9 +25,22 @@ def generate_sop_document(sop_data):
         style.font.name = 'Century Gothic'
         style.font.size = Pt(10)
         
+        # Update all built-in styles to use Century Gothic
+        for style_name in ['Heading1', 'Heading2', 'Title']:
+            if style_name in doc.styles:
+                style = doc.styles[style_name]
+                style.font.name = 'Century Gothic'
+                style.font.size = Pt(10)
+                style.font.bold = True
+        
         # Title
         title = doc.add_heading(sop_data['title'], level=1)
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        for run in title.runs:
+            run.font.name = 'Century Gothic'
+            run.font.size = Pt(10)
+            run.font.bold = True
+            run.font.underline = True
         
         # Add spacing after title
         doc.add_paragraph()
@@ -91,22 +104,34 @@ def generate_sop_document(sop_data):
         team_header = contacts.add_run('HC IT Delivery Team')
         team_header.bold = True
         team_header.underline = True
-        contacts.add_run(' (Click + or - to expand/collapse contacts)\n').italic = True
+        contacts.add_run(' (Click [+] to expand or [-] to collapse contacts)\n').italic = True
         
         # Add IT contact template with form fields
-        for i in range(1, 4):
-            contacts.add_run(f'\n[-] Contact {i}: ').bold = True
-            contacts.add_run('_______________________')
-            contacts.add_run('\n    Role: _______________________')
-            contacts.add_run('\n    Email: _______________________')
-            contacts.add_run('\n    Phone: _______________________\n')
+        contacts.add_run('\n[-] Contact 1: ').bold = True
+        contacts.add_run('Veronica Nolte')
+        contacts.add_run('\n    Role: _______________________')
+        contacts.add_run('\n    Email: Vn@test.com')
+        contacts.add_run('\n    Phone: (021) 111-111\n')
+        
+        # Contact 2 and 3 with XXXXX placeholders
+        contacts.add_run('\n[-] Contact 2: ').bold = True
+        contacts.add_run('XXXXX')
+        contacts.add_run('\n    Role: _______________________')
+        contacts.add_run('\n    Email: Vn@test.com')
+        contacts.add_run('\n    Phone: (021) 111-112\n')
+        
+        contacts.add_run('\n[-] Contact 3: ').bold = True
+        contacts.add_run('XXXXX')
+        contacts.add_run('\n    Role: _______________________')
+        contacts.add_run('\n    Email: Vn@test.com')
+        contacts.add_run('\n    Phone: (021) 111-113\n')
             
         # Payroll Support Contacts
         contacts.add_run('\n')
         payroll_header = contacts.add_run('HCSC Payroll Support')
         payroll_header.bold = True
         payroll_header.underline = True
-        contacts.add_run(' (Click + or - to expand/collapse contacts)\n').italic = True
+        contacts.add_run(' (Click [+] to expand or [-] to collapse contacts)\n').italic = True
         
         # Add Payroll contact template with form fields
         for i in range(1, 4):
