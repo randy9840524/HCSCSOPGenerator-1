@@ -32,7 +32,45 @@ with app.app_context():
         # Recreate all tables
         db.drop_all()
         db.create_all()
-        logger.info("Database tables recreated successfully")
+        
+        # Create default template
+        from models import Template
+        default_template = Template(
+            name="ISO 9000 Standard Template",
+            description="Default template for ISO 9000 compliant SOPs",
+            content="""
+1. Purpose
+{purpose_section}
+
+2. Scope
+{scope_section}
+
+3. Definitions
+{definitions_section}
+
+4. Responsibilities
+{responsibilities_section}
+
+5. Procedure
+{procedure_section}
+
+6. References
+{references_section}
+
+7. Records
+{records_section}
+
+8. Quality Records
+{quality_records_section}
+
+9. Revision History
+{revision_history_section}
+            """,
+            is_default=True
+        )
+        db.session.add(default_template)
+        db.session.commit()
+        logger.info("Database tables recreated successfully and default template created")
     except Exception as e:
         logger.error(f"Error creating database tables: {str(e)}")
         raise

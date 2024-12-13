@@ -9,6 +9,14 @@
         <form id="sopForm" method="POST" action="{{ url_for('generate_sop') }}">
             <div class="sop-header">
                 <div class="mb-4">
+                    <label for="template" class="form-label">Select Template</label>
+                    <select class="form-control" id="template" name="template_id" required>
+                        {% for template in templates %}
+                        <option value="{{ template.id }}"{% if template.is_default %} selected{% endif %}>{{ template.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4">
                     <label for="title" class="form-label">Title of SOP</label>
                     <input type="text" class="form-control" id="title" name="title" required>
                 </div>

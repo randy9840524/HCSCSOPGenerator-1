@@ -7,7 +7,8 @@ import io
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    templates = Template.query.all()
+    return render_template('index.html', templates=templates)
 
 @app.route('/generate_sop', methods=['POST'])
 def generate_sop():

@@ -8,6 +8,10 @@ def generate_sop_document(sop_data):
     doc = Document()
     sop_generator = SOPGenerator()
     
+    # Get template content
+    from models import Template
+    template = Template.query.get(sop_data.get('template_id')) or Template.query.filter_by(is_default=True).first()
+    
     # Document formatting
     style = doc.styles['Normal']
     style.font.name = 'Arial'
