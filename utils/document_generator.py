@@ -74,44 +74,26 @@ def generate_sop_document(sop_data):
         
         # IT Delivery Team Contacts
         contacts = doc.add_paragraph()
-        contacts.add_run(f'{sop_data["it_team_name"]}\n').bold = True
+        contacts.add_run('HC IT Delivery Team\n').bold = True
         
-        # Add IT contacts if they exist
-        it_contacts = []
+        # Add IT contact template
         for i in range(1, 4):
-            name = sop_data.get(f'it_contact{i}_name')
-            if name:
-                it_contacts.append({
-                    'name': name,
-                    'role': sop_data.get(f'it_contact{i}_role', ''),
-                    'email': sop_data.get(f'it_contact{i}_email', ''),
-                    'phone': sop_data.get(f'it_contact{i}_phone', '')
-                })
-        
-        for contact in it_contacts:
-            contacts.add_run(f'{contact["name"]}: {contact["role"]}\n')
-            contacts.add_run(f'Email: {contact["email"]}\n')
-            contacts.add_run(f'Phone: {contact["phone"]}\n\n')
+            contacts.add_run(f'Contact {i}: ').bold = True
+            contacts.add_run('_______________________\n')
+            contacts.add_run('Role: _______________________\n')
+            contacts.add_run('Email: _______________________\n')
+            contacts.add_run('Phone: _______________________\n\n')
             
         # Payroll Support Contacts
-        contacts.add_run(f'\n{sop_data["payroll_team_name"]}\n').bold = True
+        contacts.add_run('\nHCSC Payroll Support\n').bold = True
         
-        # Add Payroll contacts if they exist
-        payroll_contacts = []
+        # Add Payroll contact template
         for i in range(1, 4):
-            name = sop_data.get(f'payroll_contact{i}_name')
-            if name:
-                payroll_contacts.append({
-                    'name': name,
-                    'role': sop_data.get(f'payroll_contact{i}_role', ''),
-                    'email': sop_data.get(f'payroll_contact{i}_email', ''),
-                    'phone': sop_data.get(f'payroll_contact{i}_phone', '')
-                })
-        
-        for contact in payroll_contacts:
-            contacts.add_run(f'{contact["name"]}: {contact["role"]}\n')
-            contacts.add_run(f'Email: {contact["email"]}\n')
-            contacts.add_run(f'Phone: {contact["phone"]}\n\n')
+            contacts.add_run(f'Contact {i}: ').bold = True
+            contacts.add_run('_______________________\n')
+            contacts.add_run('Role: _______________________\n')
+            contacts.add_run('Email: _______________________\n')
+            contacts.add_run('Phone: _______________________\n\n')
             
         # Add Authorization section
         auth_heading = doc.add_heading('AUTHORISED BY:', level=2)
@@ -119,13 +101,13 @@ def generate_sop_document(sop_data):
         
         auth = doc.add_paragraph()
         auth.add_run('Process Owner:\n').bold = True
-        auth.add_run(f'Name & Surname: {sop_data.get("process_owner_name", "")}\n')
-        auth.add_run(f'Role: {sop_data.get("process_owner_role", "")}\n')
+        auth.add_run('Name & Surname: _______________________\n')
+        auth.add_run('Role: _______________________\n')
         auth.add_run('Signature & date: _______________________\n\n')
         
         auth.add_run('Area Head:\n').bold = True
-        auth.add_run(f'Name & Surname: {sop_data.get("area_head_name", "")}\n')
-        auth.add_run(f'Role: {sop_data.get("area_head_role", "")}\n')
+        auth.add_run('Name & Surname: _______________________\n')
+        auth.add_run('Role: _______________________\n')
         auth.add_run('Signature & date: _______________________')
 
         return doc

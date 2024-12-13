@@ -20,11 +20,7 @@ def generate_sop():
             'document_id': request.form['document_id'].strip(),
             'effective_date': datetime.strptime(request.form['effective_date'], '%Y-%m-%d'),
             'version': request.form['version'].strip(),
-            'summary': request.form['summary'].strip(),
-            'contact_email': request.form['contact_email'].strip(),
-            'contact_phone': request.form['contact_phone'].strip(),
-            'payroll_email': request.form['payroll_email'].strip(),
-            'payroll_phone': request.form['payroll_phone'].strip()
+            'summary': request.form['summary'].strip()
         }
         
         app.logger.info(f"Attempting to create SOP with document ID: {sop_data['document_id']}")
