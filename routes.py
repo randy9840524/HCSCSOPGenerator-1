@@ -1,6 +1,6 @@
 from flask import render_template, request, send_file
 from app import app, db
-from models import SOP
+from models import SOP, Template
 from utils.document_generator import generate_sop_document
 from datetime import datetime
 import io

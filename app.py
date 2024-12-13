@@ -37,35 +37,7 @@ with app.app_context():
         from models import Template
         default_template = Template(
             name="ISO 9000 Standard Template",
-            description="Default template for ISO 9000 compliant SOPs",
-            content="""
-1. Purpose
-{purpose_section}
-
-2. Scope
-{scope_section}
-
-3. Definitions
-{definitions_section}
-
-4. Responsibilities
-{responsibilities_section}
-
-5. Procedure
-{procedure_section}
-
-6. References
-{references_section}
-
-7. Records
-{records_section}
-
-8. Quality Records
-{quality_records_section}
-
-9. Revision History
-{revision_history_section}
-            """,
+            content="1. Purpose\n2. Scope\n3. Definitions\n4. Responsibilities\n5. Procedure\n6. References\n7. Records\n8. Quality Records\n9. Revision History",
             is_default=True
         )
         db.session.add(default_template)
