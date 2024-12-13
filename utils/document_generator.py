@@ -22,8 +22,8 @@ def generate_sop_document(sop_data):
 
         # Basic document setup
         style = doc.styles['Normal']
-        style.font.name = 'Arial'
-        style.font.size = Pt(11)
+        style.font.name = 'Century Gothic'
+        style.font.size = Pt(10)
         
         # Title
         title = doc.add_heading(sop_data['title'], level=1)
@@ -74,26 +74,28 @@ def generate_sop_document(sop_data):
         
         # IT Delivery Team Contacts
         contacts = doc.add_paragraph()
-        contacts.add_run('HC IT Delivery Team\n').bold = True
+        contacts.add_run('HC IT Delivery Team').bold = True
+        contacts.add_run(' (Hide/Unhide contacts as needed)\n').italic = True
         
         # Add IT contact template
         for i in range(1, 4):
-            contacts.add_run(f'Contact {i}: ').bold = True
-            contacts.add_run('_______________________\n')
-            contacts.add_run('Role: _______________________\n')
-            contacts.add_run('Email: _______________________\n')
-            contacts.add_run('Phone: _______________________\n\n')
+            contacts.add_run(f'\nContact {i}: ').bold = True
+            contacts.add_run('_______________________')
+            contacts.add_run('\nRole: _______________________')
+            contacts.add_run('\nEmail: _______________________')
+            contacts.add_run('\nPhone: _______________________\n')
             
         # Payroll Support Contacts
-        contacts.add_run('\nHCSC Payroll Support\n').bold = True
+        contacts.add_run('\nHCSC Payroll Support').bold = True
+        contacts.add_run(' (Hide/Unhide contacts as needed)\n').italic = True
         
         # Add Payroll contact template
         for i in range(1, 4):
-            contacts.add_run(f'Contact {i}: ').bold = True
-            contacts.add_run('_______________________\n')
-            contacts.add_run('Role: _______________________\n')
-            contacts.add_run('Email: _______________________\n')
-            contacts.add_run('Phone: _______________________\n\n')
+            contacts.add_run(f'\nContact {i}: ').bold = True
+            contacts.add_run('_______________________')
+            contacts.add_run('\nRole: _______________________')
+            contacts.add_run('\nEmail: _______________________')
+            contacts.add_run('\nPhone: _______________________\n')
             
         # Add Authorization section
         auth_heading = doc.add_heading('AUTHORISED BY:', level=2)
