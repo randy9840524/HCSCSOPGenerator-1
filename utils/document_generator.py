@@ -20,7 +20,7 @@ def generate_sop_document(sop_data):
             section.top_margin = Inches(1)
             section.bottom_margin = Inches(1)
 
-        # Basic document setup
+        # Basic document setup - Century Gothic 10pt
         style = doc.styles['Normal']
         style.font.name = 'Century Gothic'
         style.font.size = Pt(10)
@@ -80,85 +80,119 @@ def generate_sop_document(sop_data):
                     if lines[0].strip()[0].isdigit() and '.' in lines[0]:
                         heading = doc.add_paragraph()
                         run = heading.add_run(lines[0].strip())
+                        run.font.name = 'Century Gothic'
+                        run.font.size = Pt(10)
                         run.bold = True
-                        run.underline = True
+                        # Only underline main section headers, not procedure steps
+                        if not any(lines[0].strip().startswith(f"{i}.") for i in range(5, 6)):
+                            run.underline = True
                         # Add remaining lines
                         for line in lines[1:]:
-                            doc.add_paragraph(line.strip())
+                            para = doc.add_paragraph(line.strip())
+                            para.style.font.name = 'Century Gothic'
+                            para.style.font.size = Pt(10)
                     else:
                         para = doc.add_paragraph()
-                        para.add_run(section.strip())
+                        run = para.add_run(section.strip())
+                        run.font.name = 'Century Gothic'
+                        run.font.size = Pt(10)
         
         # Add spacing before contacts
         doc.add_paragraph()
         
-        # Add contacts section with collapsible content
+        # Contact Information Section Header
         contacts_heading = doc.add_heading('Contact Information', level=2)
         contacts_heading.alignment = WD_ALIGN_PARAGRAPH.LEFT
         for run in contacts_heading.runs:
+            run.font.name = 'Century Gothic'
+            run.font.size = Pt(10)
             run.bold = True
             run.underline = True
         
-        # IT Delivery Team Contacts
+        # IT Delivery Team Section
         contacts = doc.add_paragraph()
         team_header = contacts.add_run('HC IT Delivery Team')
+        team_header.font.name = 'Century Gothic'
+        team_header.font.size = Pt(10)
         team_header.bold = True
         team_header.underline = True
-        contacts.add_run(' (Click [+] to expand or [-] to collapse contacts)\n').italic = True
         
-        # Add IT contact template with form fields
-        contacts.add_run('\n[-] Contact 1: ').bold = True
-        contacts.add_run('Veronica Nolte')
-        contacts.add_run('\n    Role: _______________________')
-        contacts.add_run('\n    Email: Vn@test.com')
-        contacts.add_run('\n    Phone: (021) 111-111\n')
+        # Add expand/collapse hint
+        hint_run = contacts.add_run('\nExpand (+) or Collapse (-) contact details\n\n')
+        hint_run.font.name = 'Century Gothic'
+        hint_run.font.size = Pt(10)
+        hint_run.italic = True
         
-        # Contact 2 and 3 with XXXXX placeholders
-        contacts.add_run('\n[-] Contact 2: ').bold = True
-        contacts.add_run('XXXXX')
-        contacts.add_run('\n    Role: _______________________')
-        contacts.add_run('\n    Email: Vn@test.com')
-        contacts.add_run('\n    Phone: (021) 111-112\n')
+        # Add IT contact information with plus/minus symbols
+        contacts.add_run('(+) Contact 1: ').bold = True
+        contacts.add_run('Veronica Nolte\n')
+        contacts.add_run('    Role: _______________________\n')
+        contacts.add_run('    Email: Vn@test.com\n')
+        contacts.add_run('    Phone: (021) 111-111\n\n')
         
-        contacts.add_run('\n[-] Contact 3: ').bold = True
-        contacts.add_run('XXXXX')
-        contacts.add_run('\n    Role: _______________________')
-        contacts.add_run('\n    Email: Vn@test.com')
-        contacts.add_run('\n    Phone: (021) 111-113\n')
-            
-        # Payroll Support Contacts
-        contacts.add_run('\n')
+        contacts.add_run('(+) Contact 2: ').bold = True
+        contacts.add_run('XXXXX\n')
+        contacts.add_run('    Role: _______________________\n')
+        contacts.add_run('    Email: Vn@test.com\n')
+        contacts.add_run('    Phone: (021) 111-112\n\n')
+        
+        contacts.add_run('(+) Contact 3: ').bold = True
+        contacts.add_run('XXXXX\n')
+        contacts.add_run('    Role: _______________________\n')
+        contacts.add_run('    Email: Vn@test.com\n')
+        contacts.add_run('    Phone: (021) 111-113\n\n')
+        
+        # Payroll Support Section
         payroll_header = contacts.add_run('HCSC Payroll Support')
+        payroll_header.font.name = 'Century Gothic'
+        payroll_header.font.size = Pt(10)
         payroll_header.bold = True
         payroll_header.underline = True
-        contacts.add_run(' (Click [+] to expand or [-] to collapse contacts)\n').italic = True
         
-        # Add Payroll contact template with form fields
+        # Add expand/collapse hint for payroll
+        hint_run = contacts.add_run('\nExpand (+) or Collapse (-) contact details\n\n')
+        hint_run.font.name = 'Century Gothic'
+        hint_run.font.size = Pt(10)
+        hint_run.italic = True
+        
+        # Add Payroll contact template
         for i in range(1, 4):
-            contacts.add_run(f'\n[-] Contact {i}: ').bold = True
-            contacts.add_run('_______________________')
-            contacts.add_run('\n    Role: _______________________')
-            contacts.add_run('\n    Email: _______________________')
-            contacts.add_run('\n    Phone: _______________________\n')
-            
-        # Add Authorization section
-        auth_heading = doc.add_heading('AUTHORISED BY:', level=2)
-        auth_heading.alignment = WD_ALIGN_PARAGRAPH.LEFT
+            contacts.add_run(f'(+) Contact {i}: ').bold = True
+            contacts.add_run('_______________________\n')
+            contacts.add_run('    Role: _______________________\n')
+            contacts.add_run('    Email: _______________________\n')
+            contacts.add_run('    Phone: _______________________\n\n')
         
+        # Authorization Section
+        auth_heading = doc.add_heading('AUTHORIZED BY:', level=2)
+        auth_heading.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        for run in auth_heading.runs:
+            run.font.name = 'Century Gothic'
+            run.font.size = Pt(10)
+            run.bold = True
+            run.underline = True
+        
+        # Process Owner
         auth = doc.add_paragraph()
         auth.add_run('Process Owner:\n').bold = True
         auth.add_run('Name & Surname: _______________________\n')
         auth.add_run('Role: _______________________\n')
         auth.add_run('Signature & date: _______________________\n\n')
         
+        # Area Head
         auth.add_run('Area Head:\n').bold = True
         auth.add_run('Name & Surname: _______________________\n')
         auth.add_run('Role: _______________________\n')
         auth.add_run('Signature & date: _______________________')
+
+        # Ensure consistent font throughout the document
+        for paragraph in doc.paragraphs:
+            for run in paragraph.runs:
+                run.font.name = 'Century Gothic'
+                run.font.size = Pt(10)
 
         return doc
         
     except Exception as e:
         logging.error(f"Error generating SOP document: {str(e)}")
         raise
-
