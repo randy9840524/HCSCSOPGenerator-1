@@ -83,9 +83,12 @@ def generate_sop_document(sop_data):
                         run.font.name = 'Century Gothic'
                         run.font.size = Pt(10)
                         run.bold = True
-                        # Only underline main section headers, not procedure steps
-                        if not any(lines[0].strip().startswith(f"{i}.") for i in range(5, 6)):
+                        # Underline all main section headers (1-9) but not their subsections
+                        if len(lines[0].split('.')[0].strip()) == 1:
                             run.underline = True
+                        # Do not underline procedure steps (subsections under section 5)
+                        if lines[0].strip().startswith('5.'):
+                            run.underline = False
                         # Add remaining lines
                         for line in lines[1:]:
                             para = doc.add_paragraph(line.strip())
@@ -117,51 +120,56 @@ def generate_sop_document(sop_data):
         team_header.bold = True
         team_header.underline = True
         
-        # Add expand/collapse hint
-        hint_run = contacts.add_run('\nExpand (+) or Collapse (-) contact details\n\n')
+        # Add expand/collapse hint for IT section
+        hint_para = doc.add_paragraph()
+        hint_run = hint_para.add_run('▼ Click to expand/collapse contact details')
         hint_run.font.name = 'Century Gothic'
         hint_run.font.size = Pt(10)
         hint_run.italic = True
         
-        # Add IT contact information with plus/minus symbols
-        contacts.add_run('(+) Contact 1: ').bold = True
+        # Add IT contact information with expand/collapse symbols
+        contacts = doc.add_paragraph()
+        contacts.add_run('▼ Contact 1: ').bold = True
         contacts.add_run('Veronica Nolte\n')
         contacts.add_run('    Role: _______________________\n')
         contacts.add_run('    Email: Vn@test.com\n')
         contacts.add_run('    Phone: (021) 111-111\n\n')
         
-        contacts.add_run('(+) Contact 2: ').bold = True
+        contacts.add_run('▼ Contact 2: ').bold = True
         contacts.add_run('XXXXX\n')
         contacts.add_run('    Role: _______________________\n')
         contacts.add_run('    Email: Vn@test.com\n')
         contacts.add_run('    Phone: (021) 111-112\n\n')
         
-        contacts.add_run('(+) Contact 3: ').bold = True
+        contacts.add_run('▼ Contact 3: ').bold = True
         contacts.add_run('XXXXX\n')
         contacts.add_run('    Role: _______________________\n')
         contacts.add_run('    Email: Vn@test.com\n')
         contacts.add_run('    Phone: (021) 111-113\n\n')
         
         # Payroll Support Section
-        payroll_header = contacts.add_run('HCSC Payroll Support')
-        payroll_header.font.name = 'Century Gothic'
-        payroll_header.font.size = Pt(10)
-        payroll_header.bold = True
-        payroll_header.underline = True
+        payroll_header = doc.add_paragraph()
+        header_run = payroll_header.add_run('HCSC Payroll Support')
+        header_run.font.name = 'Century Gothic'
+        header_run.font.size = Pt(10)
+        header_run.bold = True
+        header_run.underline = True
         
         # Add expand/collapse hint for payroll
-        hint_run = contacts.add_run('\nExpand (+) or Collapse (-) contact details\n\n')
+        hint_para = doc.add_paragraph()
+        hint_run = hint_para.add_run('▼ Click to expand/collapse contact details')
         hint_run.font.name = 'Century Gothic'
         hint_run.font.size = Pt(10)
         hint_run.italic = True
         
         # Add Payroll contact template
+        payroll_contacts = doc.add_paragraph()
         for i in range(1, 4):
-            contacts.add_run(f'(+) Contact {i}: ').bold = True
-            contacts.add_run('_______________________\n')
-            contacts.add_run('    Role: _______________________\n')
-            contacts.add_run('    Email: _______________________\n')
-            contacts.add_run('    Phone: _______________________\n\n')
+            payroll_contacts.add_run(f'▼ Contact {i}: ').bold = True
+            payroll_contacts.add_run('_______________________\n')
+            payroll_contacts.add_run('    Role: _______________________\n')
+            payroll_contacts.add_run('    Email: _______________________\n')
+            payroll_contacts.add_run('    Phone: _______________________\n\n')
         
         # Authorization Section
         auth_heading = doc.add_heading('AUTHORIZED BY:', level=2)
