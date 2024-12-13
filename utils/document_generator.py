@@ -62,40 +62,59 @@ def generate_sop_document(sop_data):
             sections = content.split('\n\n')
             for section in sections:
                 if section.strip():
-                    para = doc.add_paragraph()
-                    para.add_run(section.strip())
+                    lines = section.strip().split('\n')
+                    # Check if the line is a heading (numbered section)
+                    if lines[0].strip()[0].isdigit() and '.' in lines[0]:
+                        heading = doc.add_paragraph()
+                        run = heading.add_run(lines[0].strip())
+                        run.bold = True
+                        run.underline = True
+                        # Add remaining lines
+                        for line in lines[1:]:
+                            doc.add_paragraph(line.strip())
+                    else:
+                        para = doc.add_paragraph()
+                        para.add_run(section.strip())
         
         # Add spacing before contacts
         doc.add_paragraph()
         
-        # Add contacts section
+        # Add contacts section with collapsible content
         contacts_heading = doc.add_heading('Contact Information', level=2)
         contacts_heading.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        for run in contacts_heading.runs:
+            run.bold = True
+            run.underline = True
         
         # IT Delivery Team Contacts
         contacts = doc.add_paragraph()
-        contacts.add_run('HC IT Delivery Team').bold = True
-        contacts.add_run(' (Hide/Unhide contacts as needed)\n').italic = True
+        team_header = contacts.add_run('HC IT Delivery Team')
+        team_header.bold = True
+        team_header.underline = True
+        contacts.add_run(' (Click + or - to expand/collapse contacts)\n').italic = True
         
-        # Add IT contact template
+        # Add IT contact template with form fields
         for i in range(1, 4):
-            contacts.add_run(f'\nContact {i}: ').bold = True
+            contacts.add_run(f'\n[-] Contact {i}: ').bold = True
             contacts.add_run('_______________________')
-            contacts.add_run('\nRole: _______________________')
-            contacts.add_run('\nEmail: _______________________')
-            contacts.add_run('\nPhone: _______________________\n')
+            contacts.add_run('\n    Role: _______________________')
+            contacts.add_run('\n    Email: _______________________')
+            contacts.add_run('\n    Phone: _______________________\n')
             
         # Payroll Support Contacts
-        contacts.add_run('\nHCSC Payroll Support').bold = True
-        contacts.add_run(' (Hide/Unhide contacts as needed)\n').italic = True
+        contacts.add_run('\n')
+        payroll_header = contacts.add_run('HCSC Payroll Support')
+        payroll_header.bold = True
+        payroll_header.underline = True
+        contacts.add_run(' (Click + or - to expand/collapse contacts)\n').italic = True
         
-        # Add Payroll contact template
+        # Add Payroll contact template with form fields
         for i in range(1, 4):
-            contacts.add_run(f'\nContact {i}: ').bold = True
+            contacts.add_run(f'\n[-] Contact {i}: ').bold = True
             contacts.add_run('_______________________')
-            contacts.add_run('\nRole: _______________________')
-            contacts.add_run('\nEmail: _______________________')
-            contacts.add_run('\nPhone: _______________________\n')
+            contacts.add_run('\n    Role: _______________________')
+            contacts.add_run('\n    Email: _______________________')
+            contacts.add_run('\n    Phone: _______________________\n')
             
         # Add Authorization section
         auth_heading = doc.add_heading('AUTHORISED BY:', level=2)
