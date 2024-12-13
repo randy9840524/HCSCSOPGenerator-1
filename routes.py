@@ -59,7 +59,10 @@ def generate_sop():
                 buffer,
                 mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 as_attachment=True,
-                download_name=f'SOP_{sop_data["document_id"]}.docx'
+                download_name=f'SOP_{sop_data["document_id"]}.docx',
+                etag=True,
+                conditional=True,
+                max_age=0
             )
         except Exception as e:
             db.session.rollback()
