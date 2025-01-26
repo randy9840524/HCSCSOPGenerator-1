@@ -130,19 +130,19 @@ def generate_sop_document(sop_data):
         contacts.add_run('+ Contact 1: ').bold = True
         contacts.add_run('Veronica Nolte\n')
         contacts.add_run('    Role: _______________________\n')
-        contacts.add_run('    Email: Vn@test.com\n')
+        contacts.add_run('    Email: \n')
         contacts.add_run('    Phone: (021) 111-111\n\n')
 
         contacts.add_run('+ Contact 2: ').bold = True
         contacts.add_run('XXXXX\n')
         contacts.add_run('    Role: _______________________\n')
-        contacts.add_run('    Email: Vn@test.com\n')
+        contacts.add_run('    Email: \n')
         contacts.add_run('    Phone: (021) 111-112\n\n')
 
         contacts.add_run('+ Contact 3: ').bold = True
         contacts.add_run('XXXXX\n')
         contacts.add_run('    Role: _______________________\n')
-        contacts.add_run('    Email: Vn@test.com\n')
+        contacts.add_run('    Email: \n')
         contacts.add_run('    Phone: (021) 111-113\n\n')
 
         # Payroll Support Section
