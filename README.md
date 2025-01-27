@@ -2,6 +2,8 @@
 
 **HCSCSOPGenerator-1** is a Python-based application designed to simplify the creation and management of Standard Operating Procedures (SOPs). This tool streamlines the process of generating and maintaining SOP documents.
 
+![SOP](https://github.com/user-attachments/assets/1265551c-953c-44eb-b515-67d1c40ac51f)
+
 ---
 
 ## Features
